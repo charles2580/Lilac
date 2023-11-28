@@ -23,14 +23,6 @@ class LILAC_API ALilPlayer : public ALilBaseCharacter
 public:
 	ALilPlayer();
 
-private:
-	//IBaseState* currentState = nullptr;
-	UObject* searchState = nullptr;
-	UObject* moveState = nullptr;
-	UObject* attackState = nullptr;
-
-	//float t = 0.0f;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -53,8 +45,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 		UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+		UInputAction* AutoAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+
+private:
+	UObject* searchState = nullptr;
 
 public:
 	// Called every frame

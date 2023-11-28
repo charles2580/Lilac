@@ -49,6 +49,7 @@ void ALilPlayer::Move(const FInputActionValue& Value)
 	AddMovementInput(ForwardDirection, MoveVector.Y);
 	const FVector RightDriection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(RightDriection, MoveVector.X);
+
 }
 
 void ALilPlayer::Look(const FInputActionValue& Value)
@@ -62,16 +63,6 @@ void ALilPlayer::Look(const FInputActionValue& Value)
 void ALilPlayer::Tick(float DeltaTime)
 {
 	StateManager->Update(DeltaTime);
-	//TEST
-	/*Super::Tick(DeltaTime);
-	t = t + DeltaTime;
-
-	if (t < 5.0f)
-	{
-		Cast<UPlayerSearchState>(SearchState)->UpdateState(this, 5.0f);
-	}*/
-
-
 }
 
 void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
