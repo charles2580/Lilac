@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "BaseState.h"
+#include "PlayerStateMachine.h"
+#include "PlayerAttackState.h"
 #include "PlayerMoveState.generated.h"
 
 /**
@@ -16,11 +18,17 @@ class LILAC_API UPlayerMoveState : public UObject, public IBaseState
 	GENERATED_BODY()
 
 private:
+	AActor* player = nullptr;
 	AActor* targetActor = nullptr;
 	FVector targetLocation = FVector::ZeroVector;
+	UPlayerStateMachine* StateManager;
 
 public:
-	virtual void OnEnterState(AActor* newActor) override;
+	virtual void OnEnterState(AActor* newActor, float deltaTime) override;
 	virtual void UpdateState(AActor* newActor, float deltaTime) override;
 	virtual void OnExitState() override;
+
+private:
+	bool isMoving;
+	float moveSpeed;
 };

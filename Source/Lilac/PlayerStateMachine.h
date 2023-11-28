@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "BaseState.h"
 #include "PlayerStateMachine.generated.h"
 
 /**
@@ -14,12 +15,14 @@ class LILAC_API UPlayerStateMachine : public UObject
 {
 	GENERATED_BODY()
 
-protected:
-	UPlayerStateMachine* PlayerSearchState = nullptr;
-	UPlayerStateMachine* PlayerMoveState = nullptr;
-	UPlayerStateMachine* PlayerAttackState = nullptr;
-	UPlayerStateMachine* CurrentState = nullptr;
+public:
+	void ChangeState(TSubclassOf<UObject> NewStateClass);
+	void Update(float DelatTime);
 
-protected:
-	virtual void ChangeState(UPlayerStateMachine* NewState);
+public:
+	UObject* CurrentState = nullptr;
+	AActor* player = nullptr;
+
+private:
+	float deltaTime = 0;
 };

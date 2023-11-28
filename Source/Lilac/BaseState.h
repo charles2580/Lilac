@@ -23,7 +23,7 @@ class LILAC_API IBaseState
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void OnEnterState(AActor* newActor) = 0;
+	virtual void OnEnterState(AActor* newActor, float delatTime) = 0;
 	virtual void UpdateState(AActor* newAcotr, float deltaTime) = 0;
 	virtual void OnExitState() = 0;
 };

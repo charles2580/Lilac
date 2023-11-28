@@ -3,14 +3,17 @@
 
 #include "PlayerAttackState.h"
 
-void UPlayerAttackState::OnEnterState(AActor* newActor)
+void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 {
+
 }
 
-void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime)
+void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Àû °ø°Ý
 {
+
 }
 
 void UPlayerAttackState::OnExitState()
 {
+
 }

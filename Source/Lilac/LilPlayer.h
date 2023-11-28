@@ -9,6 +9,7 @@
 #include "PlayerMoveState.h"
 #include "PlayerAttackState.h"
 #include "BaseState.h"
+#include "PlayerStateMachine.h"
 #include "LilPlayer.generated.h"
 
 class UInputMappingContext;
@@ -23,7 +24,7 @@ public:
 	ALilPlayer();
 
 private:
-	IBaseState* currentState = nullptr;
+	//IBaseState* currentState = nullptr;
 	UObject* searchState = nullptr;
 	UObject* moveState = nullptr;
 	UObject* attackState = nullptr;
@@ -36,7 +37,10 @@ protected:
 
 public:
 	AActor* Enemy = nullptr;
+	UPlayerStateMachine* StateManager = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		USphereComponent* SphereComponent = nullptr;
 
 protected:
 

@@ -20,7 +20,21 @@ void ALilPlayer::BeginPlay()
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
+	searchState = NewObject<UPlayerSearchState>();
+	StateManager = NewObject<UPlayerStateMachine>();
+	StateManager->CurrentState = searchState;
+	StateManager->player = this;
 
+	if (IsValid(this) && this->GetWorld())
+	{
+		SphereComponent = NewObject<USphereComponent>(this);
+		SphereComponent->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
+		SphereComponent->SetWorldLocation(this->GetActorLocation());
+		SphereComponent->InitSphereRadius(1000.0f);
+		SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore); // 모든 채널 무시
+		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
+		SphereComponent->RegisterComponent();
+	}
 	//DrawDebugSphere(GetWorld(), this->GetActorLocation(), 500.0f, 32, FColor::Red, false, 10.0f, 0, 1.0f);
 }
 
@@ -47,6 +61,7 @@ void ALilPlayer::Look(const FInputActionValue& Value)
 
 void ALilPlayer::Tick(float DeltaTime)
 {
+	StateManager->Update(DeltaTime);
 	//TEST
 	/*Super::Tick(DeltaTime);
 	t = t + DeltaTime;

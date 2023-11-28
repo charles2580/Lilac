@@ -6,7 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "BaseState.h"
 //#include "Kismet/GameplayStatics.h"
-//#include "PlayerStateMachine.h"
+#include "PlayerStateMachine.h"
+#include "PlayerMoveState.h"
 #include "Components/SphereComponent.h"
 #include "PlayerSearchState.generated.h"
 
@@ -22,13 +23,15 @@ public:
 	// »ý¼ºÀÚ
 	//UPlayerSearchState(UPlayerStateMachine* InStateMachine) : StateManager(InStateMachine) {}
 
+	USphereComponent* sphereCollider;
+
 private:
 	AActor* targetActor = nullptr;
 	FVector playerLocation = FVector::ZeroVector;
-	USphereComponent* sphereCollider = nullptr;
-	//UPlayerStateMachine* StateManager;
+	UPlayerStateMachine* StateManager;
+
 public:
-	virtual void OnEnterState(AActor* newActor) override;
+	virtual void OnEnterState(AActor* newActor, float deltaTime) override;
 	virtual void UpdateState(AActor* newActor, float deltaTime) override;
 	virtual void OnExitState() override;
 
