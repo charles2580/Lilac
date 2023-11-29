@@ -35,6 +35,9 @@ void ALilPlayer::BeginPlay()
 		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
 		SphereComponent->RegisterComponent();
 	}
+
+	isAutoMode = false;
+
 	//DrawDebugSphere(GetWorld(), this->GetActorLocation(), 500.0f, 32, FColor::Red, false, 10.0f, 0, 1.0f);
 }
 
@@ -49,7 +52,7 @@ void ALilPlayer::Move(const FInputActionValue& Value)
 	AddMovementInput(ForwardDirection, MoveVector.Y);
 	const FVector RightDriection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(RightDriection, MoveVector.X);
-
+	isAutoMode = false;
 }
 
 void ALilPlayer::Look(const FInputActionValue& Value)
@@ -60,9 +63,27 @@ void ALilPlayer::Look(const FInputActionValue& Value)
 	AddControllerYawInput(LookAxisVector.X);
 }
 
+void ALilPlayer::Auto(const FInputActionValue& Value)
+{
+	if (isAutoMode)
+	{
+		StateManager->CurrentState = searchState;
+		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
+		isAutoMode = false;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
+		isAutoMode = true;
+	}
+}
+
 void ALilPlayer::Tick(float DeltaTime)
 {
-	StateManager->Update(DeltaTime);
+	if (isAutoMode)
+	{
+		StateManager->Update(DeltaTime);
+	}
 }
 
 void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -72,5 +93,6 @@ void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALilPlayer::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALilPlayer::Look);
+		EnhancedInputComponent->BindAction(AutoAction, ETriggerEvent::Triggered, this, &ALilPlayer::Auto);
 	}
 }

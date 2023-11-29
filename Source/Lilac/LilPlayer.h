@@ -6,8 +6,7 @@
 #include "LilBaseCharacter.h"
 #include "InputActionValue.h"
 #include "PlayerSearchState.h"
-#include "PlayerMoveState.h"
-#include "PlayerAttackState.h"
+#include "Components/SphereComponent.h"
 #include "BaseState.h"
 #include "PlayerStateMachine.h"
 #include "LilPlayer.generated.h"
@@ -50,9 +49,11 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Auto(const FInputActionValue& Value);
 
 private:
 	UObject* searchState = nullptr;
+	bool isAutoMode;
 
 public:
 	// Called every frame
