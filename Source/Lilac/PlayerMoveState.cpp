@@ -10,8 +10,9 @@ void UPlayerMoveState::OnEnterState(AActor* newActor, float deltaTime)
 	targetActor = Cast<ALilPlayer>(newActor)->Enemy;
 	targetLocation = targetActor->GetActorLocation();
 	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
-	moveSpeed = 150.0f;
-	
+	moveSpeed = 300.0f;
+	//AnimInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
+
 	isMoving = true;
 
 	UpdateState(newActor, deltaTime);
@@ -27,7 +28,6 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 	
 	FVector playerDirection = (targetLocation - player->GetActorLocation()).GetSafeNormal(); //플레이어의 새로운 방향벡터
 	float distance = FVector::Dist(targetLocation, player->GetActorLocation()); //타겟과 플레이어 사이의 거리
-	
 	FRotator newDirection = playerDirection.Rotation();
 	player->SetActorRotation(newDirection); //플레이어가 타겟을 바라보게 함
 	if (!playerDirection.IsZero() && distance > 100.0f) //100.0f = 공격할수있는 최소한의 거리

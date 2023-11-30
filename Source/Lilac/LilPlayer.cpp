@@ -67,12 +67,12 @@ void ALilPlayer::Auto(const FInputActionValue& Value)
 {
 	if (isAutoMode)
 	{
-		StateManager->CurrentState = searchState;
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
 		isAutoMode = false;
 	}
 	else
 	{
+		StateManager->CurrentState = searchState;
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
 		isAutoMode = true;
 	}
