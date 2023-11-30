@@ -41,7 +41,7 @@ void ALilPlayer::BeginPlay()
 	//DrawDebugSphere(GetWorld(), this->GetActorLocation(), 500.0f, 32, FColor::Red, false, 10.0f, 0, 1.0f);
 }
 
-void ALilPlayer::Move(const FInputActionValue& Value)
+void ALilPlayer::MoveInput(const FInputActionValue& Value)
 {
 	const FVector2D MoveVector = Value.Get<FVector2D>();
 
@@ -55,7 +55,7 @@ void ALilPlayer::Move(const FInputActionValue& Value)
 	isAutoMode = false;
 }
 
-void ALilPlayer::Look(const FInputActionValue& Value)
+void ALilPlayer::LookInput(const FInputActionValue& Value)
 {
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -63,10 +63,11 @@ void ALilPlayer::Look(const FInputActionValue& Value)
 	AddControllerYawInput(LookAxisVector.X);
 }
 
-void ALilPlayer::Auto(const FInputActionValue& Value)
+void ALilPlayer::AutoInput(const FInputActionValue& Value)
 {
 	if (isAutoMode)
 	{
+		StateManager->ExitState();
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
 		isAutoMode = false;
 	}
@@ -76,6 +77,11 @@ void ALilPlayer::Auto(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
 		isAutoMode = true;
 	}
+}
+
+void ALilPlayer::AttackInput(const FInputActionValue& Value)
+{
+	//Attack();
 }
 
 void ALilPlayer::Tick(float DeltaTime)
@@ -91,8 +97,14 @@ void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALilPlayer::Move);
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALilPlayer::Look);
-		EnhancedInputComponent->BindAction(AutoAction, ETriggerEvent::Triggered, this, &ALilPlayer::Auto);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALilPlayer::MoveInput);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALilPlayer::LookInput);
+		EnhancedInputComponent->BindAction(AutoAction, ETriggerEvent::Triggered, this, &ALilPlayer::AutoInput);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ALilPlayer::AttackInput);
 	}
+}
+
+void ALilPlayer::Attack()
+{
+	//attack ±¸Çö
 }

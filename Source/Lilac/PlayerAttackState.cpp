@@ -10,7 +10,7 @@ void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 
 void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Àû °ø°Ý
 {
-
+	//player->attack()
 }
 
 void UPlayerAttackState::OnExitState()

@@ -10,10 +10,6 @@ void UPlayerSearchState::OnEnterState(AActor* newActor, float deltaTime)
 	playerLocation = newActor->GetActorLocation();
 	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
 
-
-	/*sphereCollider = NewObject<USphereComponent>(newActor);
-	sphereCollider->AttachToComponent(newActor->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
-	sphereCollider->RegisterComponent();*/
 	sphereCollider = Cast<ALilPlayer>(newActor)->SphereComponent;
 
 	UpdateState(newActor, deltaTime);

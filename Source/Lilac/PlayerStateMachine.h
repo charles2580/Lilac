@@ -18,6 +18,7 @@ class LILAC_API UPlayerStateMachine : public UObject
 public:
 	void ChangeState(TSubclassOf<UObject> NewStateClass);
 	void Update(float DelatTime);
+	void ExitState();
 
 public:
 	UObject* CurrentState = nullptr;

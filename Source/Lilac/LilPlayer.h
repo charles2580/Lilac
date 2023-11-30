@@ -47,9 +47,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 		UInputAction* AutoAction;
 
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Auto(const FInputActionValue& Value);
+	UPROPERTY(EditAnywhere, Category = Input)
+		UInputAction* AttackAction;
+
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);
+	void AutoInput(const FInputActionValue& Value);
+	void AttackInput(const FInputActionValue& Value);
 
 private:
 	UObject* searchState = nullptr;
@@ -61,5 +65,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void Attack();
 
 };

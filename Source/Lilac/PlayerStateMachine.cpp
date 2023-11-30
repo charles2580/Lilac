@@ -38,3 +38,12 @@ void UPlayerStateMachine::Update(float DeltaTime)
         }
     }
 }
+
+void UPlayerStateMachine::ExitState()
+{
+    IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
+    if (BaseStateInterface)
+    {
+        BaseStateInterface->OnExitState();
+    }
+}
