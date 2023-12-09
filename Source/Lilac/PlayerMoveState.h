@@ -22,7 +22,7 @@ private:
 	AActor* targetActor = nullptr;
 	FVector targetLocation = FVector::ZeroVector;
 	UPlayerStateMachine* StateManager;
-	//UAnimInstance* AnimInstance;
+	UAnimInstance* AnimInstance;
 public:
 	virtual void OnEnterState(AActor* newActor, float deltaTime) override;
 	virtual void UpdateState(AActor* newActor, float deltaTime) override;

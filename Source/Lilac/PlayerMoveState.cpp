@@ -11,7 +11,7 @@ void UPlayerMoveState::OnEnterState(AActor* newActor, float deltaTime)
 	targetLocation = targetActor->GetActorLocation();
 	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
 	moveSpeed = 300.0f;
-	//AnimInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
+	AnimInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
 
 	isMoving = true;
 
@@ -30,11 +30,25 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 	float distance = FVector::Dist(targetLocation, player->GetActorLocation()); //타겟과 플레이어 사이의 거리
 	FRotator newDirection = playerDirection.Rotation();
 	player->SetActorRotation(newDirection); //플레이어가 타겟을 바라보게 함
+
 	if (!playerDirection.IsZero() && distance > 100.0f) //100.0f = 공격할수있는 최소한의 거리
 	{
 		FVector newLocation = player->GetActorLocation() + playerDirection * moveSpeed * deltaTime;
+		FVector CalculatedVelocity = (newLocation - player->GetActorLocation()) / deltaTime;
 		player->SetActorLocation(newLocation); //플레이어 위치 재설정
 	}
+
+	if (AnimInstance)
+	{
+		FVector Velocity = player->GetVelocity();
+		float Speed = Velocity.Size();
+		float Direction = AnimInstance->CalculateDirection(Velocity, player->GetActorRotation());
+
+		/*AnimInstance->set
+		AnimInstance->SetFloatParameter("Speed", Speed);
+		AnimInstance->SetFloatParameter("Direction", Direction);*/
+	}
+
 	else
 	{
 		isMoving = false;

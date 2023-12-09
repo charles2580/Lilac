@@ -21,9 +21,8 @@ void UPlayerSearchState::UpdateState(AActor* newActor, float deltaTime)
 
 	//SphereCollider 확인용 디버그스페어
 	//DrawDebugSphere(newActor->GetWorld(), playerLocation, 1000.0f, 32, FColor::Red, false, 10.0f, 0, 1.0f);
-	SearchTarget(newActor);
 	
-	if (targetActor)// 타겟이 있으면 적오브젝트로 설정 -> MoveState로 변경
+	if (SearchTarget(newActor))// 타겟이 있으면 적오브젝트로 설정 -> MoveState로 변경
 	{
 		Cast<ALilPlayer>(newActor)->Enemy = targetActor;
 		StateManager->ChangeState(UPlayerMoveState::StaticClass());

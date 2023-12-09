@@ -27,11 +27,18 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
 	AActor* Enemy = nullptr;
 	UPlayerStateMachine* StateManager = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		USphereComponent* SphereComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+		UAnimMontage* MyAnimMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float Direction;
 
 protected:
 
