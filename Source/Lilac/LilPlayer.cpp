@@ -20,10 +20,6 @@ void ALilPlayer::BeginPlay()
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
-	searchState = NewObject<UPlayerSearchState>();
-	StateManager = NewObject<UPlayerStateMachine>();
-	StateManager->CurrentState = searchState;
-	StateManager->player = this;
 
 	if (IsValid(this) && this->GetWorld())
 	{
@@ -36,8 +32,21 @@ void ALilPlayer::BeginPlay()
 		SphereComponent->RegisterComponent();
 	}
 
+	UAnimInstance* pAnimInstance = GetMesh()->GetAnimInstance();
+	if (pAnimInstance)
+	{
+		pAnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ALilPlayer::HandleOnMontageNotifyBegin);
+	}
+	comboIndex = 0;
+
+	StateManager = NewObject<UPlayerStateMachine>();
+	StateManager->player = this;
+	StateManager->ChangeState(UPlayerSearchState::StaticClass());
+
 	isAutoMode = false;
 
+	R_Weapon = Cast<UCapsuleComponent>(GetDefaultSubobjectByName(TEXT("RightBlade")));
+	L_Weapon = Cast<UCapsuleComponent>(GetDefaultSubobjectByName(TEXT("LeftBlade")));
 	//DrawDebugSphere(GetWorld(), this->GetActorLocation(), 500.0f, 32, FColor::Red, false, 10.0f, 0, 1.0f);
 }
 
@@ -67,13 +76,11 @@ void ALilPlayer::AutoInput(const FInputActionValue& Value)
 {
 	if (isAutoMode)
 	{
-		StateManager->ExitState();
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
 		isAutoMode = false;
 	}
 	else
 	{
-		StateManager->CurrentState = searchState;
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
 		isAutoMode = true;
 	}
@@ -81,7 +88,7 @@ void ALilPlayer::AutoInput(const FInputActionValue& Value)
 
 void ALilPlayer::AttackInput(const FInputActionValue& Value)
 {
-	//Attack();
+	Attack();
 }
 
 void ALilPlayer::Tick(float DeltaTime)
@@ -107,4 +114,45 @@ void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 void ALilPlayer::Attack()
 {
 	//attack ±¸Çö
+	if (!isAttacking())
+	{
+		UAnimInstance* animInst = GetMesh()->GetAnimInstance();
+		if (animInst)
+		{
+			if (comboAttackMontage)
+			{
+				animInst->Montage_Play(comboAttackMontage);
+			}
+		}
+	}
+	else
+	{
+		comboIndex = 1;
+	}
+}
+
+void ALilPlayer::HandleOnMontageNotifyBegin(FName notifyName, const FBranchingPointNotifyPayload& branchingPayload)
+{
+	comboIndex--;
+	if (comboIndex < 0)
+	{
+		UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+		if (animInstance)
+		{
+			animInstance->Montage_Stop(0.3f, comboAttackMontage);
+		}
+	}
+}
+
+bool ALilPlayer::isAttacking()
+{
+	UAnimInstance* animInst = GetMesh()->GetAnimInstance();
+	if (animInst)
+	{
+		if (animInst->Montage_IsPlaying(comboAttackMontage))
+		{
+			return true;
+		}
+	}
+	return false;
 }

@@ -29,6 +29,5 @@ public:
 	virtual void OnExitState() override;
 
 private:
-	bool isMoving;
 	float moveSpeed;
 };

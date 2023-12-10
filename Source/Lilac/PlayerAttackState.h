@@ -23,4 +23,5 @@ public:
 
 private:
 	UPlayerStateMachine* StateManager;
+	AActor* player = nullptr;
 };

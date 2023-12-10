@@ -34,7 +34,7 @@ void UPlayerStateMachine::Update(float DeltaTime)
         IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
         if (BaseStateInterface)
         {
-            BaseStateInterface->OnEnterState(player, deltaTime);
+            BaseStateInterface->UpdateState(player, deltaTime);
         }
     }
 }

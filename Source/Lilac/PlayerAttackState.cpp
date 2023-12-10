@@ -2,18 +2,20 @@
 
 
 #include "PlayerAttackState.h"
-
+#include "LilPlayer.h"
 void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 {
-
+	player = Cast<ALilPlayer>(newActor);
+	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
 }
 
 void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Àû °ø°Ý
 {
-	//player->attack()
+	Cast<ALilPlayer>(newActor)->Attack();
 }
 
 void UPlayerAttackState::OnExitState()
 {
-
+	player = NULL;
+	StateManager = NULL;
 }

@@ -12,7 +12,7 @@ void UPlayerSearchState::OnEnterState(AActor* newActor, float deltaTime)
 
 	sphereCollider = Cast<ALilPlayer>(newActor)->SphereComponent;
 
-	UpdateState(newActor, deltaTime);
+	//UpdateState(newActor, deltaTime);
 }
 
 void UPlayerSearchState::UpdateState(AActor* newActor, float deltaTime)

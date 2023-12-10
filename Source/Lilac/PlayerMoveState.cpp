@@ -13,19 +13,11 @@ void UPlayerMoveState::OnEnterState(AActor* newActor, float deltaTime)
 	moveSpeed = 300.0f;
 	AnimInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
 
-	isMoving = true;
-
-	UpdateState(newActor, deltaTime);
+	//UpdateState(newActor, deltaTime);
 }
 
 void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 이동하는 로직
-{
-	if (!isMoving)
-	{
-		UE_LOG(LogTemp, Log, TEXT("is arrived"));
-		//StateManager->ChangeState(UPlayerAttackState::StaticClass());
-	}
-	
+{	
 	FVector playerDirection = (targetLocation - player->GetActorLocation()).GetSafeNormal(); //플레이어의 새로운 방향벡터
 	float distance = FVector::Dist(targetLocation, player->GetActorLocation()); //타겟과 플레이어 사이의 거리
 	FRotator newDirection = playerDirection.Rotation();
@@ -38,20 +30,20 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 		player->SetActorLocation(newLocation); //플레이어 위치 재설정
 	}
 
-	if (AnimInstance)
-	{
-		FVector Velocity = player->GetVelocity();
-		float Speed = Velocity.Size();
-		float Direction = AnimInstance->CalculateDirection(Velocity, player->GetActorRotation());
+	//if (AnimInstance)
+	//{
+	//	FVector Velocity = player->GetVelocity();
+	//	float Speed = Velocity.Size();
+	//	float Direction = AnimInstance->CalculateDirection(Velocity, player->GetActorRotation());
 
-		/*AnimInstance->set
-		AnimInstance->SetFloatParameter("Speed", Speed);
-		AnimInstance->SetFloatParameter("Direction", Direction);*/
-	}
-
-	else
+	//	/*AnimInstance->set
+	//	AnimInstance->SetFloatParameter("Speed", Speed);
+	//	AnimInstance->SetFloatParameter("Direction", Direction);*/
+	//}
+	if (distance < 100.0f)
 	{
-		isMoving = false;
+		UE_LOG(LogTemp, Log, TEXT("is arrived"));
+		StateManager->ChangeState(UPlayerAttackState::StaticClass());
 	}
 }
 

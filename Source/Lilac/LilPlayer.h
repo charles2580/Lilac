@@ -7,6 +7,7 @@
 #include "InputActionValue.h"
 #include "PlayerSearchState.h"
 #include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "BaseState.h"
 #include "PlayerStateMachine.h"
 #include "LilPlayer.generated.h"
@@ -36,10 +37,18 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 		UAnimMontage* MyAnimMontage;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")	
+		UAnimMontage* comboAttackMontage;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float Direction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CapsuleComponent")
+		UCapsuleComponent* R_Weapon;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CapsuleComponent")
+		UCapsuleComponent* L_Weapon;
 protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
@@ -65,6 +74,7 @@ protected:
 private:
 	UObject* searchState = nullptr;
 	bool isAutoMode;
+	float comboIndex;
 
 public:
 	// Called every frame
@@ -74,5 +84,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Attack();
+	bool isAttacking();
+
+	UFUNCTION()
+	void HandleOnMontageNotifyBegin(FName notifyName, const FBranchingPointNotifyPayload& branchingPayload);
 
 };
