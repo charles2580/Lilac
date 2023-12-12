@@ -9,9 +9,9 @@ void UPlayerMoveState::OnEnterState(AActor* newActor, float deltaTime)
 	player = Cast<ALilPlayer>(newActor);
 	targetActor = Cast<ALilPlayer>(newActor)->Enemy;
 	targetLocation = targetActor->GetActorLocation();
-	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
+	stateManager = Cast<ALilPlayer>(newActor)->StateManager;
 	moveSpeed = 300.0f;
-	AnimInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
+	//animInstance = Cast<ALilPlayer>(newActor)->GetMesh()->GetAnimInstance();
 
 	//UpdateState(newActor, deltaTime);
 }
@@ -40,10 +40,11 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 	//	AnimInstance->SetFloatParameter("Speed", Speed);
 	//	AnimInstance->SetFloatParameter("Direction", Direction);*/
 	//}
+
 	if (distance < 100.0f)
 	{
 		UE_LOG(LogTemp, Log, TEXT("is arrived"));
-		StateManager->ChangeState(UPlayerAttackState::StaticClass());
+		stateManager->ChangeState(UPlayerAttackState::StaticClass());
 	}
 }
 
@@ -53,5 +54,5 @@ void UPlayerMoveState::OnExitState()
 	targetLocation = FVector::ZeroVector;
 	moveSpeed = 0.0f;
 	player = nullptr;
-	StateManager = nullptr;
+	stateManager = nullptr;
 }

@@ -5,17 +5,19 @@
 #include "LilPlayer.h"
 void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 {
-	player = Cast<ALilPlayer>(newActor);
-	StateManager = Cast<ALilPlayer>(newActor)->StateManager;
+	stateManager = Cast<ALilPlayer>(newActor)->StateManager;
 }
 
 void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Àû °ø°Ý
 {
-	Cast<ALilPlayer>(newActor)->Attack();
+	if (Cast<ALilPlayer>(newActor)->Enemy)
+	{
+		Cast<ALilPlayer>(newActor)->Attack();
+	}
+	stateManager->ChangeState(UPlayerSearchState::StaticClass());
 }
 
 void UPlayerAttackState::OnExitState()
 {
-	player = NULL;
-	StateManager = NULL;
+	stateManager = NULL;
 }

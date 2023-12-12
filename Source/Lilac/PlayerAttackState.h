@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "BaseState.h"
 #include "PlayerStateMachine.h"
+#include "PlayerSearchState.h"
 #include "PlayerAttackState.generated.h"
 
 /**
@@ -22,6 +23,5 @@ public:
 	virtual void OnExitState() override;
 
 private:
-	UPlayerStateMachine* StateManager;
-	AActor* player = nullptr;
+	UPlayerStateMachine* stateManager;
 };
