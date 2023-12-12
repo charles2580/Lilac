@@ -30,10 +30,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* Enemy = nullptr;
-
+	
 	UPlayerStateMachine* StateManager = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		AActor* Enemy = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		USphereComponent* SphereComponent = nullptr;
@@ -44,8 +45,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")	
 		UAnimMontage* comboAttackMontage;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float Direction;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
+		bool isAutoMode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AnimationBlueprint")
+		FVector Speed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CapsuleComponent")
 		UCapsuleComponent* R_Weapon;
@@ -76,7 +79,6 @@ protected:
 
 private:
 	UObject* searchState = nullptr;
-	bool isAutoMode;
 	float comboIndex;
 
 public:

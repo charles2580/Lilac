@@ -11,13 +11,24 @@ void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Рћ АјАн
 {
 	ALilPlayer* player = Cast<ALilPlayer>(newActor);
-	if (player && player->Enemy->CheckStillInWorld())
+	if (player)
 	{
-		player->Attack();
-	}
-	else
-	{
-		stateManager->ChangeState(UPlayerSearchState::StaticClass());
+		if (player->Enemy->CheckStillInWorld())
+		{
+			player->Attack();
+		}
+		else
+		{
+			UAnimInstance* animInst = player->GetMesh()->GetAnimInstance();
+			if (animInst)
+			{
+				if (player->comboAttackMontage)
+				{
+					animInst->Montage_Stop(0.0f,player->comboAttackMontage);
+				}
+			}
+			stateManager->ChangeState(UPlayerSearchState::StaticClass());
+		}
 	}
 }
 

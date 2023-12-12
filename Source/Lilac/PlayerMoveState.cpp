@@ -27,6 +27,7 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 	{
 		FVector newLocation = player->GetActorLocation() + playerDirection * moveSpeed * deltaTime;
 		FVector CalculatedVelocity = (newLocation - player->GetActorLocation()) / deltaTime;
+		Cast<ALilPlayer>(newActor)->Speed = CalculatedVelocity;
 		player->SetActorLocation(newLocation); //플레이어 위치 재설정
 	}
 
