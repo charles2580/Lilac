@@ -10,11 +10,15 @@ void UPlayerAttackState::OnEnterState(AActor* newActor, float deltaTime)
 
 void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Рћ АјАн
 {
-	if (Cast<ALilPlayer>(newActor)->Enemy)
+	ALilPlayer* player = Cast<ALilPlayer>(newActor);
+	if (player && player->Enemy->CheckStillInWorld())
 	{
-		Cast<ALilPlayer>(newActor)->Attack();
+		player->Attack();
 	}
-	stateManager->ChangeState(UPlayerSearchState::StaticClass());
+	else
+	{
+		stateManager->ChangeState(UPlayerSearchState::StaticClass());
+	}
 }
 
 void UPlayerAttackState::OnExitState()

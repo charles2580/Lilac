@@ -41,7 +41,7 @@ void UPlayerMoveState::UpdateState(AActor* newActor, float deltaTime) //적에게 �
 	//	AnimInstance->SetFloatParameter("Direction", Direction);*/
 	//}
 
-	if (distance < 100.0f)
+	if (distance < 150.0f)
 	{
 		UE_LOG(LogTemp, Log, TEXT("is arrived"));
 		stateManager->ChangeState(UPlayerAttackState::StaticClass());

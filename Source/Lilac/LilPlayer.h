@@ -6,6 +6,8 @@
 #include "LilBaseCharacter.h"
 #include "InputActionValue.h"
 #include "PlayerSearchState.h"
+#include "PlayerAttackState.h"
+#include "PlayerMoveState.h"
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "BaseState.h"
@@ -28,8 +30,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AActor* Enemy = nullptr;
+
 	UPlayerStateMachine* StateManager = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

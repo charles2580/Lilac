@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "BaseState.h"
 #include "PlayerStateMachine.h"
-#include "PlayerSearchState.h"
+//#include "PlayerSearchState.h"
 #include "PlayerAttackState.generated.h"
 
 /**
