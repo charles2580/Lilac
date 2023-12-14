@@ -5,23 +5,26 @@
 
 void UPlayerStateMachine::ChangeState(TSubclassOf<UObject> NewStateClass)
 {
-    if (CurrentState)
+    if (NewStateClass != NULL)
     {
-        IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
-        if (BaseStateInterface)
+        if (CurrentState)
         {
-            BaseStateInterface->OnExitState();
+            IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
+            if (BaseStateInterface)
+            {
+                BaseStateInterface->OnExitState();
+            }
+            CurrentState->ConditionalBeginDestroy();//새로운 상태로 전환하기 전에 현재 상태의 리소스를 정리
         }
-        CurrentState->ConditionalBeginDestroy();//새로운 상태로 전환하기 전에 현재 상태의 리소스를 정리
-    }
 
-    CurrentState = NewObject<UObject>(this, NewStateClass);
-    if (CurrentState)
-    {
-        IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
-        if (BaseStateInterface)
+        CurrentState = NewObject<UObject>(this, NewStateClass);
+        if (CurrentState)
         {
-            BaseStateInterface->OnEnterState(player, deltaTime);
+            IBaseState* BaseStateInterface = Cast<IBaseState>(CurrentState);
+            if (BaseStateInterface)
+            {
+                BaseStateInterface->OnEnterState(player, deltaTime);
+            }
         }
     }
 }

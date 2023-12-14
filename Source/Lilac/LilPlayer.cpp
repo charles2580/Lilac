@@ -26,7 +26,7 @@ void ALilPlayer::BeginPlay()
 		SphereComponent = NewObject<USphereComponent>(this);
 		SphereComponent->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
 		SphereComponent->SetWorldLocation(this->GetActorLocation());
-		SphereComponent->InitSphereRadius(1000.0f);
+		SphereComponent->InitSphereRadius(2000.0f);
 		SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore); // 모든 채널 무시
 		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
 		SphereComponent->RegisterComponent();
@@ -77,6 +77,7 @@ void ALilPlayer::AutoInput(const FInputActionValue& Value)
 	if (isAutoMode)
 	{
 		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
+		StateManager->ChangeState(UPlayerSearchState::StaticClass());
 		isAutoMode = false;
 	}
 	else

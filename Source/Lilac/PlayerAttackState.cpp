@@ -13,8 +13,18 @@ void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //적 공�
 	ALilPlayer* player = Cast<ALilPlayer>(newActor);
 	if (player)
 	{
-		if (player->Enemy->CheckStillInWorld())
+		FVector enemyLoc;
+		float distance;
+		if (player->Enemy)
 		{
+			enemyLoc = player->Enemy->GetActorLocation();
+			distance = (enemyLoc - player->GetActorLocation()).Size();
+		}
+		if (player->Enemy->CheckStillInWorld() && distance < 150.0f )
+		{
+			FVector playerDirection = (enemyLoc - player->GetActorLocation()).GetSafeNormal(); //플레이어의 새로운 방향벡터
+			FRotator newDirection = playerDirection.Rotation();
+			player->SetActorRotation(newDirection); //플레이어가 타겟을 바라보게 함
 			player->Attack();
 		}
 		else
