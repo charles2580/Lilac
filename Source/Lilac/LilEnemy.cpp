@@ -17,8 +17,10 @@ void ALilEnemy::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ALilEnemy::Enemy_Attack()
+void ALilEnemy::Attack()
 {
+	Super::Attack();
+
 	UAnimInstance* animInst = GetMesh()->GetAnimInstance();
 	if (animInst)
 	{

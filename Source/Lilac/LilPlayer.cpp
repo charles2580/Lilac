@@ -52,16 +52,19 @@ void ALilPlayer::BeginPlay()
 
 void ALilPlayer::MoveInput(const FInputActionValue& Value)
 {
-	const FVector2D MoveVector = Value.Get<FVector2D>();
+	if (!isAttacking())
+	{
+		const FVector2D MoveVector = Value.Get<FVector2D>();
 
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	AddMovementInput(ForwardDirection, MoveVector.Y);
-	const FVector RightDriection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	AddMovementInput(RightDriection, MoveVector.X);
-	isAutoMode = false;
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(ForwardDirection, MoveVector.Y);
+		const FVector RightDriection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(RightDriection, MoveVector.X);
+		isAutoMode = false;
+	}
 }
 
 void ALilPlayer::LookInput(const FInputActionValue& Value)
@@ -114,6 +117,8 @@ void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 void ALilPlayer::Attack()
 {
+	Super::Attack();
+
 	//attack ±¸Çö
 	if (!isAttacking())
 	{

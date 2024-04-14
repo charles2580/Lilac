@@ -20,8 +20,7 @@ public: ALilEnemy();
 	  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 	  UAnimMontage* EnemyAttack_Montage;
 
-	  UFUNCTION(BlueprintCallable)
-	  void Enemy_Attack();
+	  virtual void Attack() override;
 	
 	  UCharacterMovementComponent* enemy_movc;
 private:

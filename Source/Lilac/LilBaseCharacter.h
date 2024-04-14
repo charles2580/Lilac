@@ -28,4 +28,7 @@ public:
 
 	UFUNCTION()
 	void ChangeSpeed(float speed);
+
+	UFUNCTION()
+	virtual void Attack();
 };

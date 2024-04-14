@@ -3,7 +3,6 @@
 
 #include "LilBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "LilEnemyAIController.h"
 
 // Sets default values
 ALilBaseCharacter::ALilBaseCharacter()
@@ -37,5 +36,9 @@ void ALilBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void ALilBaseCharacter::ChangeSpeed(float speed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = speed;
+}
+
+void ALilBaseCharacter::Attack()
+{
 }
 

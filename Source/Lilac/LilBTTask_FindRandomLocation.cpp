@@ -13,13 +13,13 @@ ULilBTTask_FindRandomLocation::ULilBTTask_FindRandomLocation(FObjectInitializer 
 
 EBTNodeResult::Type ULilBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	if (auto* const cont = Cast<ALilEnemyAIController>(OwnerComp.GetAIOwner()))
+	if (auto* const cont = OwnerComp.GetAIOwner()) //현재 behaviorTree를 실행시킨 ai컨트롤러
 	{
-		if (auto* const Enemy = cont->GetPawn())
+		if (auto* const Enemy = cont->GetPawn()) //ai 컨트롤러를 소유하고 있는 pawn
 		{
 			auto const Origin = Enemy->GetActorLocation();
 
-			if (auto* const Nav = UNavigationSystemV1::GetCurrent(GetWorld()))
+			if (auto* const Nav = UNavigationSystemV1::GetCurrent(GetWorld())) // 현재 월드의 네비게이션 시스템
 			{
 				FNavLocation Loc;
 				

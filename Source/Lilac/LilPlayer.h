@@ -88,7 +88,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void Attack();
+
+	virtual void Attack() override;
 	bool isAttacking();
 
 	UFUNCTION()
