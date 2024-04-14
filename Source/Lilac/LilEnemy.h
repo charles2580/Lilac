@@ -14,4 +14,27 @@ class LILAC_API ALilEnemy : public ALilBaseCharacter
 {
 	GENERATED_BODY()
 	
+
+public: ALilEnemy();
+
+	  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	  UAnimMontage* EnemyAttack_Montage;
+
+	  UFUNCTION(BlueprintCallable)
+	  void Enemy_Attack();
+	
+	  UCharacterMovementComponent* enemy_movc;
+private:
+	UFUNCTION()
+	void OnSeePawn(APawn* Pawn);
+
+	UFUNCTION()
+	void OnSeePawnHandler();
+
+	APawn* target;
+
+public:
+	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
+
 };
