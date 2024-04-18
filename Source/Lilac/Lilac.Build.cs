@@ -11,6 +11,6 @@ public class Lilac : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] 
 		{ "Core", "CoreUObject", "Engine", "InputCore", 
 			"HeadMountedDisplay", "EnhancedInput", 
-			"AIModule", "NavigationSystem","GameplayTasks" });
+			"AIModule", "NavigationSystem","GameplayTasks", "Niagara" });
 	}
 }
