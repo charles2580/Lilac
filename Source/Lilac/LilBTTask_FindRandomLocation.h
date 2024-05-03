@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
+#include "BehaviorTree/Tasks/BTTask_PlayAnimation.h"
 #include "LilBTTask_FindRandomLocation.generated.h"
 
 /**
