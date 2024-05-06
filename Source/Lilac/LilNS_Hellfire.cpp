@@ -21,6 +21,6 @@ void ULilNS_Hellfire::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenc
 
 void ULilNS_Hellfire::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	attackArea = nullptr;
+	attackArea->Destroy();
 }
 

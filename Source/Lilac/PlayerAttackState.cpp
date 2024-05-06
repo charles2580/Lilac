@@ -13,8 +13,8 @@ void UPlayerAttackState::UpdateState(AActor* newActor, float deltaTime) //Àû °ø°
 	ALilPlayer* player = Cast<ALilPlayer>(newActor);
 	if (player)
 	{
-		FVector enemyLoc;
-		float distance;
+		FVector enemyLoc (0.0f,0.0f,0.0f);
+		float distance = 0;
 		if (player->Enemy)
 		{
 			enemyLoc = player->Enemy->GetActorLocation();
