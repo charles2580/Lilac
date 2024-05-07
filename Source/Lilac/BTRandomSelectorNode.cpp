@@ -17,6 +17,8 @@ int32 UBTRandomSelectorNode::GetNextChildHandler(FBehaviorTreeSearchData& Search
 	{
 		NextChildIndex = FMath::RandRange(0, GetChildrenNum() - 1);
 	}
+
+	//마지막 결과가 성공이면, 다시 랜덤으로 선택 (RandomSelectorNode의 자식노드가 성공을 반환하면 계속 실행)
 	//else if (LastResult == EBTNodeResult::Succeeded)
 	//{
 	//	NextChildIndex = FMath::RandRange(0, GetChildrenNum() - 1);
