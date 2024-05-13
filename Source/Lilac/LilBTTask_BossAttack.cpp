@@ -17,14 +17,16 @@ EBTNodeResult::Type ULilBTTask_BossAttack::ExecuteTask(UBehaviorTreeComponent& O
 	{
 		if (auto const boss = Cast<ALilBoss>(cont->GetPawn()))
 		{
+			UAnimInstance* AnimInstance = boss->GetMesh()->GetAnimInstance();
 			boss->Set_Montage(BossAttack_Montage);
+
 			boss->Attack();
 		}
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-		return EBTNodeResult::Succeeded;
-	}
-	
-	
+		
+			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+			return EBTNodeResult::Succeeded;
+
+	}	
 	return EBTNodeResult::Failed;
 
 }

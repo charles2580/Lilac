@@ -22,4 +22,5 @@ public:
 	UAnimMontage* BossAttack_Montage;
 
 private:
+	//UAnimInstance* BossAnimInstance;
 };
