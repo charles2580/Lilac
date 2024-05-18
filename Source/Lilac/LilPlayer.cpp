@@ -13,6 +13,7 @@ ALilPlayer::ALilPlayer()
 void ALilPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -20,7 +21,7 @@ void ALilPlayer::BeginPlay()
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
-
+		
 	if (IsValid(this) && this->GetWorld())
 	{
 		SphereComponent = NewObject<USphereComponent>(this);
@@ -28,6 +29,7 @@ void ALilPlayer::BeginPlay()
 		SphereComponent->SetWorldLocation(this->GetActorLocation());
 		SphereComponent->InitSphereRadius(2000.0f);
 		SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore); // 모든 채널 무시
+		SphereComponent->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
 		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
 		SphereComponent->RegisterComponent();
 	}
@@ -39,11 +41,11 @@ void ALilPlayer::BeginPlay()
 	}
 	comboIndex = 0;
 
-	StateManager = NewObject<UPlayerStateMachine>();
-	StateManager->player = this;
-	StateManager->ChangeState(UPlayerSearchState::StaticClass());
+	//StateManager = NewObject<UPlayerStateMachine>();
+	//StateManager->player = this;
+	//StateManager->ChangeState(UPlayerSearchState::StaticClass());
 
-	isAutoMode = false;
+	//isAutoMode = false;
 
 	R_Weapon = Cast<UCapsuleComponent>(GetDefaultSubobjectByName(TEXT("RightBlade")));
 	L_Weapon = Cast<UCapsuleComponent>(GetDefaultSubobjectByName(TEXT("LeftBlade")));
@@ -75,20 +77,20 @@ void ALilPlayer::LookInput(const FInputActionValue& Value)
 	AddControllerYawInput(LookAxisVector.X);
 }
 
-void ALilPlayer::AutoInput(const FInputActionValue& Value)
-{
-	if (isAutoMode)
-	{
-		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
-		StateManager->ChangeState(UPlayerSearchState::StaticClass());
-		isAutoMode = false;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
-		isAutoMode = true;
-	}
-}
+//void ALilPlayer::AutoInput(const FInputActionValue& Value)
+//{
+//	if (isAutoMode)
+//	{
+//		UE_LOG(LogTemp, Log, TEXT("AutoMdoe OFF"));
+//		StateManager->ChangeState(UPlayerSearchState::StaticClass());
+//		isAutoMode = false;
+//	}
+//	else
+//	{
+//		UE_LOG(LogTemp, Log, TEXT("AutoMdoe ON"));
+//		isAutoMode = true;
+//	}
+//}
 
 void ALilPlayer::AttackInput(const FInputActionValue& Value)
 {
@@ -97,10 +99,11 @@ void ALilPlayer::AttackInput(const FInputActionValue& Value)
 
 void ALilPlayer::Tick(float DeltaTime)
 {
-	if (isAutoMode)
-	{
-		StateManager->Update(DeltaTime);
-	}
+	Super::Tick(DeltaTime);
+	//if (isAutoMode)
+	//{
+	//	StateManager->Update(DeltaTime);
+	//}
 }
 
 void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -110,7 +113,7 @@ void ALilPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALilPlayer::MoveInput);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALilPlayer::LookInput);
-		EnhancedInputComponent->BindAction(AutoAction, ETriggerEvent::Triggered, this, &ALilPlayer::AutoInput);
+	//	EnhancedInputComponent->BindAction(AutoAction, ETriggerEvent::Triggered, this, &ALilPlayer::AutoInput);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ALilPlayer::AttackInput);
 	}
 }

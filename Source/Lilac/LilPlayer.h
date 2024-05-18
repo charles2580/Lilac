@@ -66,19 +66,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 		UInputAction* LookAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
-		UInputAction* AutoAction;
+	//UPROPERTY(EditAnywhere, Category = Input)
+	//	UInputAction* AutoAction;
 
 	UPROPERTY(EditAnywhere, Category = Input)
 		UInputAction* AttackAction;
 
 	void MoveInput(const FInputActionValue& Value);
 	void LookInput(const FInputActionValue& Value);
-	void AutoInput(const FInputActionValue& Value);
+	//void AutoInput(const FInputActionValue& Value);
 	void AttackInput(const FInputActionValue& Value);
 
 private:
-	UObject* searchState = nullptr;
+	//UObject* searchState = nullptr;
 	float comboIndex;
 
 public:
