@@ -6,6 +6,8 @@
 
 ALilEnemy::ALilEnemy()
 {
+	PriorityID = FPriorityID(2, "Enemy");
+
 	AIControllerClass = ALilEnemyAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 

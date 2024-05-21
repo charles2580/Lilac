@@ -8,6 +8,7 @@
 
 ALilPlayer::ALilPlayer()
 {
+	PriorityID = FPriorityID(1, "Player");
 }
 
 void ALilPlayer::BeginPlay()
@@ -21,7 +22,8 @@ void ALilPlayer::BeginPlay()
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
-		
+	
+	//탐지범위
 	if (IsValid(this) && this->GetWorld())
 	{
 		SphereComponent = NewObject<USphereComponent>(this);
@@ -32,7 +34,13 @@ void ALilPlayer::BeginPlay()
 		SphereComponent->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
 		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
 		SphereComponent->RegisterComponent();
+	
+		SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ALilPlayer::OnDetected);
+		SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ALilPlayer::OnLost);
 	}
+
+	//탐지액터 map생성
+	Initialize_PriorityMap();
 
 	UAnimInstance* pAnimInstance = GetMesh()->GetAnimInstance();
 	if (pAnimInstance)
@@ -152,6 +160,82 @@ void ALilPlayer::HandleOnMontageNotifyBegin(FName notifyName, const FBranchingPo
 		}
 	}
 }
+
+AActor* ALilPlayer::GetTarget()
+{
+	AActor* BestTarget = nullptr;
+	float ClosestDistance = FLT_MAX;
+
+	for (const auto& Elem : priorityMap)
+	{
+		for (AActor* Actor : Elem.Value)
+		{
+			float Distance = FVector::Dist(Actor->GetActorLocation(), GetActorLocation());
+			if (Distance < ClosestDistance)
+			{
+				ClosestDistance = Distance;
+				BestTarget = Actor;
+			}
+		}
+		if (BestTarget)
+		{
+			break;
+		}
+	}
+
+	return BestTarget;
+}
+
+void ALilPlayer::Initialize_PriorityMap()
+{
+	priorityMap.Add(1, TSet<AActor*>());
+	priorityMap.Add(2, TSet<AActor*>());
+	priorityMap.Add(3, TSet<AActor*>());
+}
+
+void ALilPlayer::AddToPriorityMap(AActor* Actor, int32 Priority)
+{
+	if (priorityMap.Contains(Priority))
+	{
+		priorityMap[Priority].Add(Actor);
+	}
+}
+
+void ALilPlayer::RemoveFromPriorityMap(AActor* Actor, int32 Priority)
+{
+	if (priorityMap.Contains(Priority))
+	{
+		priorityMap[Priority].Remove(Actor);
+	}
+}
+
+void ALilPlayer::OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor)
+	{
+		ALilBaseCharacter* BaseCharacter = Cast<ALilBaseCharacter>(OtherActor);
+		if (BaseCharacter)
+		{
+			int32 priority = BaseCharacter->PriorityID.Priority;
+			AddToPriorityMap(OtherActor, priority);
+		}
+	}
+}
+
+void ALilPlayer::OnLost(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor)
+	{
+		ALilBaseCharacter* Basecharacter = Cast<ALilBaseCharacter>(OtherActor);		
+		if (Basecharacter)
+		{
+			int32 priority = Basecharacter->PriorityID.Priority;
+			RemoveFromPriorityMap(OtherActor, priority);
+		}
+	}
+}
+
+
 
 bool ALilPlayer::isAttacking()
 {

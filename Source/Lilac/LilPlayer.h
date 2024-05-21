@@ -29,6 +29,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);
+	//void AutoInput(const FInputActionValue& Value);
+	void AttackInput(const FInputActionValue& Value);
+
 public:
 	
 	UPlayerStateMachine* StateManager = nullptr;
@@ -72,14 +77,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 		UInputAction* AttackAction;
 
-	void MoveInput(const FInputActionValue& Value);
-	void LookInput(const FInputActionValue& Value);
-	//void AutoInput(const FInputActionValue& Value);
-	void AttackInput(const FInputActionValue& Value);
-
 private:
 	//UObject* searchState = nullptr;
 	float comboIndex;
+	AActor* Target;
+	TMap<int32, TSet<AActor*>> priorityMap;
 
 public:
 	// Called every frame
@@ -94,5 +96,24 @@ public:
 
 	UFUNCTION()
 	void HandleOnMontageNotifyBegin(FName notifyName, const FBranchingPointNotifyPayload& branchingPayload);
+
+	AActor* GetTarget();
+
+private:
+
+	void Initialize_PriorityMap();
+	void AddToPriorityMap(AActor* Actor, int32 Priority);
+	void RemoveFromPriorityMap(AActor* Actor, int32 Priority);
+
+
+	UFUNCTION()
+	void OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+		bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnLost(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 };

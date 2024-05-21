@@ -6,6 +6,32 @@
 #include "GameFramework/Character.h"
 #include "LilBaseCharacter.generated.h"
 
+
+USTRUCT(BlueprintType)
+struct FPriorityID
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Priority")
+    int32 Priority;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Priority")
+    FString ID;
+
+    FPriorityID()
+    {
+        Priority = -1;
+        ID = "None";
+    }
+
+    FPriorityID(int32 InPriority, FString InID)
+    {
+        Priority = InPriority;
+        ID = InID;
+    }
+};
+
+
 UCLASS()
 class LILAC_API ALilBaseCharacter : public ACharacter
 {
@@ -31,4 +57,7 @@ public:
 
 	UFUNCTION()
 	virtual void Attack();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Priority")
+    FPriorityID PriorityID;
 };
