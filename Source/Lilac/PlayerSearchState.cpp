@@ -54,7 +54,6 @@ AActor* UPlayerSearchState::SearchTarget(AActor* newActor)
 		if (Distance < shortDistance) {
 			shortDistance = Distance;
 			targetActor = Actor;
-			//UE_LOG(LogTemp, Log, TEXT("%s"), *targetActor->GetName());
 		}
 	}
 	return targetActor;

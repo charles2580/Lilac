@@ -24,7 +24,7 @@ public:
 	explicit ALilEnemyAIController(FObjectInitializer const& ObjectInitializer);
 	
 	virtual void BeginPlay() override;
-	virtual void OnPossess(APawn* Pawn)override;
+	virtual void OnPossess(APawn* APawn)override;
 
 
 	//class UBlackboardComponent* get_blackboard() const;

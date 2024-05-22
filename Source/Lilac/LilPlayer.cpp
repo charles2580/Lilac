@@ -198,6 +198,7 @@ void ALilPlayer::AddToPriorityMap(AActor* Actor, int32 Priority)
 	if (priorityMap.Contains(Priority))
 	{
 		priorityMap[Priority].Add(Actor);
+
 	}
 }
 
@@ -218,6 +219,7 @@ void ALilPlayer::OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 		{
 			int32 priority = BaseCharacter->PriorityID.Priority;
 			AddToPriorityMap(OtherActor, priority);
+			UE_LOG(LogTemp, Log, TEXT("hahaha"));
 		}
 	}
 }
