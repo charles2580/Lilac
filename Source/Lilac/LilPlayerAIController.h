@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "LilPlayer.h"
+#include "LilPlayerWidget.h"
 #include "LilPlayerAIController.generated.h"
 
 /**
@@ -25,6 +27,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void OnPossess(APawn* APawn)override;
 	virtual void OnUnPossess()override;
+	void SetTarget();
 
 private:
 
@@ -36,10 +39,19 @@ private:
 	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	class UBehaviorTree* btree;
 
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ULilPlayerWidget> playerWidget;
+
 	class UBlackboardComponent* blackboard;
+	void UpdateDetectedActor();
 
-	void SetTarget();
+	UFUNCTION()
+	void OnTargetDestroyed(AActor* DestroyedActor);
 
+	TArray<ALilBaseCharacter*> detectedActors;
+
+	ULilPlayerWidget* gridWidget;
 	float targetUpdate_Interval;
-	
+	AActor* target;
+
 };

@@ -29,7 +29,7 @@ void ALilPlayer::BeginPlay()
 		SphereComponent = NewObject<USphereComponent>(this);
 		SphereComponent->AttachToComponent(this->GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
 		SphereComponent->SetWorldLocation(this->GetActorLocation());
-		SphereComponent->InitSphereRadius(2000.0f);
+		SphereComponent->InitSphereRadius(5000.0f);
 		SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore); // 모든 채널 무시
 		SphereComponent->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel2);
 		SphereComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_GameTraceChannel1, ECR_Overlap); //Enemy로 설정된 채널만 Overlap검사
@@ -186,11 +186,16 @@ AActor* ALilPlayer::GetTarget()
 	return BestTarget;
 }
 
+void ALilPlayer::GetDetectedActors(TArray<ALilBaseCharacter*> &Array)
+{
+	Array = detectedActors;
+}
+
 void ALilPlayer::Initialize_PriorityMap()
 {
-	priorityMap.Add(1, TSet<AActor*>());
-	priorityMap.Add(2, TSet<AActor*>());
-	priorityMap.Add(3, TSet<AActor*>());
+	priorityMap.Add(1, TArray<AActor*>());
+	priorityMap.Add(2, TArray<AActor*>());
+	priorityMap.Add(3, TArray<AActor*>());
 }
 
 void ALilPlayer::AddToPriorityMap(AActor* Actor, int32 Priority)
@@ -210,6 +215,24 @@ void ALilPlayer::RemoveFromPriorityMap(AActor* Actor, int32 Priority)
 	}
 }
 
+void ALilPlayer::SortDetectedActors()
+{
+	detectedActors.Sort([this](const ALilBaseCharacter& A, const ALilBaseCharacter& B)
+		{			
+			if (A.PriorityID.Priority == B.PriorityID.Priority)
+			{
+				return FVector::Dist(this->GetActorLocation(), A.GetActorLocation()) < FVector::Dist(this->GetActorLocation(), B.GetActorLocation());
+			}
+			return A.PriorityID.Priority > B.PriorityID.Priority;
+		}
+	);
+
+	if (detectedActors.Num() > 8)
+	{
+		detectedActors.SetNum(8);
+	}
+}
+
 void ALilPlayer::OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor)
@@ -219,7 +242,8 @@ void ALilPlayer::OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 		{
 			int32 priority = BaseCharacter->PriorityID.Priority;
 			AddToPriorityMap(OtherActor, priority);
-			UE_LOG(LogTemp, Log, TEXT("hahaha"));
+			detectedActors.AddUnique(BaseCharacter);
+			UE_LOG(LogTemp, Log, TEXT("add"));
 		}
 	}
 }
@@ -233,10 +257,11 @@ void ALilPlayer::OnLost(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		{
 			int32 priority = Basecharacter->PriorityID.Priority;
 			RemoveFromPriorityMap(OtherActor, priority);
+			detectedActors.Remove(Basecharacter);
+			UE_LOG(LogTemp, Log, TEXT("remove"));
 		}
 	}
 }
-
 
 
 bool ALilPlayer::isAttacking()

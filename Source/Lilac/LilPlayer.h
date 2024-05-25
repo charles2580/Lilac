@@ -25,15 +25,6 @@ class LILAC_API ALilPlayer : public ALilBaseCharacter
 public:
 	ALilPlayer();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	void MoveInput(const FInputActionValue& Value);
-	void LookInput(const FInputActionValue& Value);
-	//void AutoInput(const FInputActionValue& Value);
-	void AttackInput(const FInputActionValue& Value);
-
 public:
 	
 	UPlayerStateMachine* StateManager = nullptr;
@@ -81,7 +72,8 @@ private:
 	//UObject* searchState = nullptr;
 	float comboIndex;
 	AActor* Target;
-	TMap<int32, TSet<AActor*>> priorityMap;
+	TMap<int32, TArray<AActor*>> priorityMap;
+	TArray<ALilBaseCharacter*> detectedActors;
 
 public:
 	// Called every frame
@@ -98,13 +90,23 @@ public:
 	void HandleOnMontageNotifyBegin(FName notifyName, const FBranchingPointNotifyPayload& branchingPayload);
 
 	AActor* GetTarget();
+	void GetDetectedActors(TArray<ALilBaseCharacter*> &Array);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void MoveInput(const FInputActionValue& Value);
+	void LookInput(const FInputActionValue& Value);
+	//void AutoInput(const FInputActionValue& Value);
+	void AttackInput(const FInputActionValue& Value);
 
 private:
 
 	void Initialize_PriorityMap();
 	void AddToPriorityMap(AActor* Actor, int32 Priority);
 	void RemoveFromPriorityMap(AActor* Actor, int32 Priority);
-
+	void SortDetectedActors();
 
 	UFUNCTION()
 	void OnDetected(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -114,6 +116,4 @@ private:
 	UFUNCTION()
 	void OnLost(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-
 };
