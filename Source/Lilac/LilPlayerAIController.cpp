@@ -16,7 +16,7 @@ ALilPlayerAIController::ALilPlayerAIController(FObjectInitializer const& ObjectI
     }
     behavior_tree_Comp = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
     blackboard = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
-    targetUpdate_Interval = 3.0f;
+    targetUpdate_Interval = 300.0f;
     target = nullptr;
 }
 
@@ -74,6 +74,7 @@ void ALilPlayerAIController::UpdateDetectedActor()
             return;
         }
         blackboard->SetValueAsBool(TEXT("isAnyDetectedActor"), true);
+        
         detectedActors.Sort([player](const ALilBaseCharacter& A, const ALilBaseCharacter& B)
             {
                 if (A.PriorityID.Priority == B.PriorityID.Priority)
@@ -97,9 +98,8 @@ void ALilPlayerAIController::UpdateDetectedActor()
 
 void ALilPlayerAIController::OnTargetDestroyed(AActor* DestroyedActor)
 {
-    if (DestroyedActor == target)
-    {
-        target = nullptr;
-        blackboard->SetValueAsObject(TEXT("Target"), target);
-    }
+    target = nullptr;
+    detectedActors.RemoveAt(0);
+    blackboard->SetValueAsObject(TEXT("Target"), nullptr);
+    gridWidget->UpdateTextBlocks(detectedActors);
 }
