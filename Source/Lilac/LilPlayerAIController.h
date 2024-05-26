@@ -47,6 +47,7 @@ private:
 
 	UFUNCTION()
 	void OnTargetDestroyed(AActor* DestroyedActor);
+	float GetDistanceToTarget(const ALilBaseCharacter& Target);
 
 	TArray<ALilBaseCharacter*> detectedActors;
 

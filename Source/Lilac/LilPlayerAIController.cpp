@@ -6,6 +6,8 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "NavigationSystem.h"
+#include "NavigationPath.h"
 
 ALilPlayerAIController::ALilPlayerAIController(FObjectInitializer const& ObjectInitializer)
 {
@@ -16,7 +18,7 @@ ALilPlayerAIController::ALilPlayerAIController(FObjectInitializer const& ObjectI
     }
     behavior_tree_Comp = ObjectInitializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorComp"));
     blackboard = ObjectInitializer.CreateDefaultSubobject<UBlackboardComponent>(this, TEXT("BlackboardComp"));
-    targetUpdate_Interval = 300.0f;
+    targetUpdate_Interval = 5.0f;
     target = nullptr;
 }
 
@@ -63,7 +65,6 @@ void ALilPlayerAIController::SetTarget()
 
 void ALilPlayerAIController::UpdateDetectedActor()
 {
-    TRACE_CPUPROFILER_EVENT_SCOPE(TEXT("ReticulatingSplines"));
     ALilPlayer* player = Cast<ALilPlayer>(GetPawn());
     if (player)
     {
@@ -75,11 +76,15 @@ void ALilPlayerAIController::UpdateDetectedActor()
         }
         blackboard->SetValueAsBool(TEXT("isAnyDetectedActor"), true);
         
-        detectedActors.Sort([player](const ALilBaseCharacter& A, const ALilBaseCharacter& B)
+        detectedActors.Sort([this](const ALilBaseCharacter& A, const ALilBaseCharacter& B)
             {
                 if (A.PriorityID.Priority == B.PriorityID.Priority)
                 {
-                    return FVector::Dist(player->GetActorLocation(), A.GetActorLocation()) < FVector::Dist(player->GetActorLocation(), B.GetActorLocation());
+                    if (GetDistanceToTarget(A) > 0 && GetDistanceToTarget(B) > 0)
+                    {
+                        return GetDistanceToTarget(A) < GetDistanceToTarget(B);
+                    }
+                    //return FVector::Dist(player->GetActorLocation(), A.GetActorLocation()) < FVector::Dist(player->GetActorLocation(), B.GetActorLocation());
                 }
                 return A.PriorityID.Priority < B.PriorityID.Priority;
             }
@@ -102,4 +107,25 @@ void ALilPlayerAIController::OnTargetDestroyed(AActor* DestroyedActor)
     detectedActors.RemoveAt(0);
     blackboard->SetValueAsObject(TEXT("Target"), nullptr);
     gridWidget->UpdateTextBlocks(detectedActors);
+}
+
+float ALilPlayerAIController::GetDistanceToTarget(const ALilBaseCharacter& Target)
+{
+    UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+    if (NavSys)
+    {
+        ANavigationData* NavData = NavSys->GetDefaultNavDataInstance(FNavigationSystem::ECreateIfEmpty::DontCreate);
+        if (NavData)
+        {
+            FPathFindingQuery Query;
+            FVector StartLocation = GetPawn()->GetActorLocation();
+            FVector EndLocation = Target.GetActorLocation();
+            UNavigationPath* NavPath = NavSys->FindPathToLocationSynchronously(GetWorld(), StartLocation, EndLocation);
+            if (NavPath->IsValid())
+            {
+                return NavPath->GetPathLength();
+            }
+        }
+    }
+    return -1.0f;
 }

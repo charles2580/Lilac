@@ -21,8 +21,8 @@ public: ALilBoss();
 
 
 	virtual void Attack() override;
-
 	void Set_Montage(UAnimMontage* AttackMontage);
 
 	UAnimMontage* BossAttack_Montage;
+
 };

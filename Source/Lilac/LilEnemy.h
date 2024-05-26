@@ -21,7 +21,6 @@ public: ALilEnemy();
 	  UAnimMontage* EnemyAttack_Montage;
 
 	  virtual void Attack() override;
-	
 	  UCharacterMovementComponent* enemy_movc;
 private:
 	UFUNCTION()
